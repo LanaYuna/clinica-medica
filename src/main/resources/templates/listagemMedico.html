@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Aqui vai a lista</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>Nome</th>
+				<th>CPF</th>
+				<th>E-mail</th>
+				<th>CRM</th>
+				<th>Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="medico : ${medicos}">
+				<td th:text="${medico.nome}">?</td>
+				<td th:text="${medico.cpf}">?</td>
+				<td th:text="${medico.email}">?</td>
+				<td th:text="${medico.crm}">?</td>
+				<td><a th:href=@{editarMedico?>editar</a></td>
+				<td><a th:href=@{removerMedico(cpf={$medico.cpf})}>remover</a></td>
+			</tr>
+		</tbody>			
+	</table>
+</body>
+</html>
