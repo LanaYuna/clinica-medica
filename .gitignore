@@ -1,0 +1,19 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!target/classes/archetype-resources/META-INF/maven/archetype.xml
+
+# IDEs
+.idea/
+*.iws
+*.iml
+*.ipr
+.settings/
+.project
+.classpath
+.vscode/
+
+# Logs e SO
+*.log
+.DS_Store
+Thumbs.db
