@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Cadastro</title>
+	<meta charset="ISO-8859-1">
+	<title>Cadastro</title>
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="bg-blue-50 min-h-screen">
 
-	<form action="/cadastroMedico" method="POST">
-		<h1>Cadastro Medico</h1>
+	<div class="flex justify-center pt-24">
 	
-		<div>
-			<div>
-				<label for="nome">Nome</label>
-				<input type="text" name="nome">
+		<form action="/cadastroMedico" method="POST" class="p-8 rounded-lg shadow-md w-100">
+		
+			<h1 class="text-3xl font-bold mb-4">Cadastro Medico</h1>
+		
+			<div class="flex flex-col">
+				<div class="flex flex-col">
+					<label for="nome">Nome</label>
+					<input type="text" name="nome" class="mt-2 rounded-lg shadow-md border-2 border-gray-200 text-center">
+				</div>
+				<div class="flex flex-col">
+					<label for="email">Email</label>
+					<input type="email" name="email" class="mt-2 rounded-lg shadow-md border-2 border-gray-200 text-center">
+				</div>
+				<div class="flex flex-col">
+					<label for="cpf">CPF</label>
+					<input type="text" name="cpf" class="mt-2 rounded-lg shadow-md border-2 border-gray-200 text-center">
+				</div>
+				<div class="flex flex-col">
+					<label for="crm">CRM</label>
+					<input type="text" name="crm" class="mt-2 rounded-lg shadow-md border-2 border-gray-200 text-center">
+				</div>
 			</div>
-			<div>
-				<label for="email">Email</label>
-				<input type="email" name="email">
-			</div>
-			<div>
-				<label for="cpf">cpf</label>
-				<input type="text" name="cpf">
-			</div>
-			<div>
-				<label for="crm">crm</label>
-				<input type="text" name="crm">
-			</div>
-		</div>
-	
-	
-		<button type="submit">Enviar</button>
-	</form>
+			<button type="submit" class="inline-block mt-8 bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700">Enviar</button>
+		</form>
+		
+	</div>
+
 </body>
 </html>

@@ -1,12 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Clínica Médica</title>
+    <meta charset="UTF-8">
+    <title>Clínica Médica</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-	<h1>Página principal</h1>
-	<a href="cadastroMedico">Cadastrar médico</a>
-	<a href="listagemMedico">Listar Medicos</a>
+
+<body class="bg-blue-50 min-h-screen">
+
+    <div class="flex flex-col items-center text-center pt-24">
+    
+        <h1 class="text-3xl font-bold">
+            Clínica Médica
+        </h1>
+
+        <p class="mt-4">
+            Sistema institucional para gerenciamento de médicos e diagnósticos
+        </p>
+    </div>
+
+    <div class="flex justify-center gap-12 mt-12">
+
+        <div class="p-8 rounded-lg shadow-md text-center w-100">
+            <h2 class="text-xl font-semibold text-gray-800">
+                Cadastro de Médicos
+            </h2>
+            
+            <p class="pt-4	">
+            	Realize o cadastro de novos profissionais médicos, incluindo dados pessoais e especialidades.
+            </p>
+
+            <a 
+                href="cadastroMedico"
+                class="inline-block mt-8 bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700"
+            >
+                Acessar Cadastro
+            </a>
+        </div>
+
+        <div class="p-8 rounded-lg shadow-md text-center w-100">
+            <h2 class="text-xl font-semibold text-gray-800">
+                Listagem de Médicos
+            </h2>
+            
+            <p class="pt-4">
+            	Consulte todos os médicos cadastrados no sistema e visualize rapidamente as informações registradas.
+            </p>
+
+            <a 
+                href="listagemMedico"
+                class="inline-block mt-8 bg-green-600 text-white px-5 py-2 rounded-md hover:bg-green-700"
+            >
+                Visualizar Médicos
+            </a>
+        </div>
+
+    </div>
+
 </body>
 </html>
+```
