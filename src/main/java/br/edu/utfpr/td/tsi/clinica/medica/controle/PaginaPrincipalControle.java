@@ -3,12 +3,13 @@ package br.edu.utfpr.td.tsi.clinica.medica.controle;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
+import br.edu.utfpr.td.tsi.clinica.medica.modelo.Especialidade;
 import br.edu.utfpr.td.tsi.clinica.medica.persistencia.BancoDados;
-import ch.qos.logback.core.model.Model;
 
 @Controller
 public class PaginaPrincipalControle {
@@ -21,7 +22,8 @@ public class PaginaPrincipalControle {
 	}
 	
 	@GetMapping("cadastroMedico")
-	public String mostrarPaginaCadastroMedico() {
+	public String mostrarPaginaCadastroMedico(Model model) {
+		model.addAttribute("especialidades", Especialidade.values());
 		return "cadastroMedico";
 	}
 	
