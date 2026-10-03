@@ -1,35 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
-<meta charset="ISO-8859-1">
-<title>Cadastro</title>
+    <meta charset="UTF-8">
+    <title>Cadastro Médico</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="bg-blue-50 min-h-screen">
 
-	<form action="/cadastroMedico" method="POST">
-		<h1>Cadastro Medico</h1>
-	
-		<div>
-			<div>
-				<label for="nome">Nome</label>
-				<input type="text" name="nome">
-			</div>
-			<div>
-				<label for="email">Email</label>
-				<input type="email" name="email">
-			</div>
-			<div>
-				<label for="cpf">cpf</label>
-				<input type="text" name="cpf">
-			</div>
-			<div>
-				<label for="crm">crm</label>
-				<input type="text" name="crm">
-			</div>
-		</div>
-	
-	
-		<button type="submit">Enviar</button>
-	</form>
+    <div class="flex justify-center pt-6 pb-6">
+    
+        <form action="/cadastroMedico" method="POST" class="bg-white p-8 rounded-lg shadow-md w-140">
+        
+            <a href="inicio">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-600 hover:text-black">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </a>
+    
+            <h1 class="text-3xl font-bold my-4">Cadastro Médico</h1>
+        
+            <div class="flex flex-col gap-4">
+            
+                <div class="flex flex-col">
+                    <label for="nome" class="font-medium text-gray-700">Nome</label>
+                    <input type="text" id="nome" name="nome" class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500">
+                </div>
+                
+                <div class="flex flex-col">
+                    <label for="email" class="font-medium text-gray-700">E-mail</label>
+                    <input type="email" id="email" name="email" class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500">
+                </div>
+                
+                <div class="flex flex-col">
+                    <label for="cpf" class="font-medium text-gray-700">CPF</label>
+                    <input type="text" id="cpf" name="cpf" class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500">
+                </div>
+                
+                <div class="flex flex-col">
+                    <label for="crm" class="font-medium text-gray-700">CRM</label>
+                    <input type="text" id="crm" name="crm" class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500">
+                </div>
+                
+                <div class="flex flex-col">
+                    <label class="font-medium text-gray-700 mb-2">Especialidades</label>
+                    <div class="grid grid-cols-2 gap-2 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <div th:each="especialidade : ${especialidades}" class="flex items-center gap-2">
+                            <input type="checkbox" 
+                                   name="especialidades" 
+                                   th:id="${especialidade}" 
+                                   th:value="${especialidade.name()}" 
+                                   class="w-4 h-4 text-blue-600 rounded">
+                            <label th:for="${especialidade}" th:text="${especialidade.descricao}" class="text-sm text-gray-700 cursor-pointer"></label>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <button type="submit" class="w-full mt-8 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                Salvar
+            </button>
+        </form>
+        
+    </div>
+
 </body>
 </html>
