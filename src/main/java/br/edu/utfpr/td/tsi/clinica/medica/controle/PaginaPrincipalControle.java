@@ -6,13 +6,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Especialidade;
 import br.edu.utfpr.td.tsi.clinica.medica.persistencia.BancoDados;
+import br.edu.utfpr.td.tsi.clinica.medica.persistencia.MedicoDAO;
 
 @Controller
 public class PaginaPrincipalControle {
+	
+	@Autowired
+	private MedicoDAO dao;
 	
 	BancoDados bancoDados = new BancoDados();
 
@@ -29,9 +34,8 @@ public class PaginaPrincipalControle {
 	
 	@PostMapping("cadastroMedico")
 	public String receberFormMedico(Medico medico) {
-
-		bancoDados.salvar(medico);
-		return "pagina";
+		dao.salvar(medico); 
+		return "paginaPrincipal";
 	}
 	
 //	@GetMapping("listagemMedico")
