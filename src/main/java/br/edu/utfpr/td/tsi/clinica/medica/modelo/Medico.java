@@ -3,11 +3,19 @@ package br.edu.utfpr.td.tsi.clinica.medica.modelo;
 import java.util.List;
 
 public class Medico {
+	private String id;
 	private String nome;
 	private String cpf;
 	private String email;
 	private String crm;
 	private List<Especialidade> especialidades;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	
 	public String getNome() {
 		return nome;
@@ -48,5 +56,4 @@ public class Medico {
 				+ especialidades + "]";
 	}
 	
-
 }
