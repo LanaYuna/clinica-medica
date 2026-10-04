@@ -1,31 +1,104 @@
+
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem de Médicos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-	<h1>Aqui vai a lista</h1>
-	<table>
-		<thead>
-			<tr>
-				<th>Nome</th>
-				<th>CPF</th>
-				<th>E-mail</th>
-				<th>CRM</th>
-				<th>A��es</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="medico : ${medicos}">
-				<td th:text="${medico.nome}">?</td>
-				<td th:text="${medico.cpf}">?</td>
-				<td th:text="${medico.email}">?</td>
-				<td th:text="${medico.crm}">?</td>
-				<td><a th:href=@{editarMedico?>editar</a></td>
-				<td><a th:href=@{removerMedico(cpf={$medico.cpf})}>remover</a></td>
-			</tr>
-		</tbody>			
-	</table>
+
+<body class="min-h-screen bg-blue-50 flex items-center justify-center px-6 py-10">
+
+    <main class="w-full max-w-5xl bg-white rounded-3xl shadow-xl px-8 py-12 md:px-12">
+
+        <header class="text-center mb-10">
+
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-blue-900">
+                Listagem de Médicos
+            </h1>
+
+            <p class="mt-4 text-base md:text-lg text-gray-500">
+                Consulte todos os profissionais cadastrados no sistema.
+            </p>
+
+        </header>
+
+        <div class="overflow-x-auto rounded-xl border border-blue-100">
+
+            <table class="w-full text-left border-collapse">
+
+                <thead class="bg-blue-600 text-white">
+                    <tr>
+                        <th class="px-6 py-4 font-semibold">Nome</th>
+                        <th class="px-6 py-4 font-semibold">CPF</th>
+                        <th class="px-6 py-4 font-semibold">E-mail</th>
+                        <th class="px-6 py-4 font-semibold">CRM</th>
+                        <th class="px-6 py-4 font-semibold text-center">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-blue-100">
+
+                    <tr th:each="medico : ${medicos}"
+                        class="hover:bg-blue-50/60 transition-colors">
+
+                        <td th:text="${medico.nome}"
+                            class="px-6 py-4 text-gray-700 font-medium">
+                            ?
+                        </td>
+
+                        <td th:text="${medico.cpf}"
+                            class="px-6 py-4 text-gray-600">
+                            ?
+                        </td>
+
+                        <td th:text="${medico.email}"
+                            class="px-6 py-4 text-gray-600">
+                            ?
+                        </td>
+
+                        <td th:text="${medico.crm}"
+                            class="px-6 py-4 text-gray-600">
+                            ?
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="flex items-center justify-center gap-3">
+
+                                <a th:href="@{/editarMedico(cpf=${medico.cpf})}"
+                                   class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                                    Editar
+                                </a>
+
+                                <a th:href="@{/removerMedico(cpf=${medico.cpf})}"
+                                   class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                                    Remover
+                                </a>
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="flex justify-center mt-8">
+
+            <a href="inicio"
+               class="inline-flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold px-5 py-2.5 rounded-lg border border-blue-100 transition-all duration-200">
+
+                Voltar ao início
+
+            </a>
+
+        </div>
+
+    </main>
+
 </body>
 </html>

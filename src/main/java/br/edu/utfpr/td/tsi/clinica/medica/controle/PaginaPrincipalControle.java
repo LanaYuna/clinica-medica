@@ -18,8 +18,7 @@ public class PaginaPrincipalControle {
 	
 	@Autowired
 	private MedicoDAO dao;
-	
-	BancoDados bancoDados = new BancoDados();
+
 
 	@GetMapping("inicio")
 	public String mostrarPaginaInicio() {
@@ -38,12 +37,12 @@ public class PaginaPrincipalControle {
 		return "paginaPrincipal";
 	}
 	
-//	@GetMapping("listagemMedico")
-//	public String mostrarPaginaListagemMedicos(Model model) {
-//		List<Medico> listaGravadaNoBD = bancoDados.listarTodos();
-//		model.addAttribute("medicos", listaGravadaNoBD);
-//		return "listagemMedico";
-//	}
+	@GetMapping("listagemMedico")
+	public String mostrarPaginaListagemMedicos(Model model) {
+		List<Medico> medicos = dao.listarTodos();
+		model.addAttribute("medicos", medicos);
+		return "listagemMedico";
+	}
 //	
 //	@GetMapping("/removerMedico")
 //	public String removerMedico(String cpf, Model model){
