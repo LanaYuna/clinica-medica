@@ -7,7 +7,7 @@ import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
 public interface MedicoDAO {
 
 	public void salvar(Medico medico);
-	public Medico encontrar(String id);
+	public Medico buscarPorCpf(String cpf);
 	public void remover(String id);
 	public void alterar(Medico medico);
 	public List<Medico> listarTodos();

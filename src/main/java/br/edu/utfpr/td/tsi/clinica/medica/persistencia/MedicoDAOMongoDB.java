@@ -19,6 +19,8 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Especialidade;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
@@ -31,12 +33,32 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 	private final MongoCollection<Document> collection;
 
 	public MedicoDAOMongoDB() {
-	this.mongoClient = MongoClients.create("mongodb://localhost:27017");
-	this.database = mongoClient.getDatabase("clinica-medica");
-	this.collection = database.getCollection("medico");
+		this.mongoClient = MongoClients.create("mongodb://localhost:27017");
+		this.database = mongoClient.getDatabase("clinica-medica");
+		this.collection = database.getCollection("medico");
+		
+		try {
+	        this.collection.createIndex(Indexes.ascending("cpf"), new IndexOptions().unique(true));
+	        this.collection.createIndex(Indexes.ascending("crm"), new IndexOptions().unique(true));
+	        this.collection.createIndex(Indexes.ascending("email"), new IndexOptions().unique(true));
+	    } catch (Exception e) {
+	        System.err.println("Aviso: Não foi possível criar os índices únicos no MongoDB: " + e.getMessage());
+	    }
 	}
 
 	public void salvar(Medico medico) {
+		validarCamposObrigatorios(medico);
+		
+		if(buscarPorCpf(medico.getCpf()) != null) {
+			throw new IllegalArgumentException("Já existe um médico cadastrado com este CPF!");
+		}
+		if(buscarPorCrm(medico.getCrm()) != null) {
+			throw new IllegalArgumentException("Já existe um médico cadastrado com este CRM!");
+		}
+		if(buscarPorEmail(medico.getEmail()) != null) {
+			throw new IllegalArgumentException("Já existe um médico cadastrado com este E-mail!");
+		}
+		
 		Document doc = toDocument(medico);
 		collection.insertOne(doc);
 	}
@@ -47,14 +69,9 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 		collection.updateOne(filtro, novo);
 	}
 
-//	public void remover(String cpf) {
-//		collection.deleteOne(new Document("cpf", cpf));
-//	}
-//
-//	public Medico encontrar(String cpf) {
-//		Document doc = collection.find(new Document("cpf", cpf)).first();
-//		return doc != null ? fromDocument(doc) : null;
-//	}
+	public void remover(String cpf) {
+		collection.deleteOne(new Document("cpf", cpf));
+	}
 
 	public List<Medico> listarTodos() {
 		List<Medico> lista = new ArrayList<>();
@@ -98,4 +115,40 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 		}
 		return medico;
 	}
+	
+	public Medico buscarPorCpf(String cpf) {
+		Document doc = collection.find(new Document("cpf", cpf)).first();
+		return doc != null ? fromDocument(doc) : null;
+	}
+	
+	public Medico buscarPorCrm(String crm) {
+		Document doc = collection.find(new Document("crm", crm)).first();
+		return doc != null ? fromDocument(doc) : null;
+	}
+	
+	public Medico buscarPorEmail(String email) {
+		Document doc = collection.find(new Document("email", email)).first();
+		return doc != null ? fromDocument(doc) : null;
+	}
+	
+	private void validarCamposObrigatorios(Medico medico) {
+        if (medico == null) {
+            throw new IllegalArgumentException("O objeto médico não pode ser nulo.");
+        }
+        if (medico.getNome() == null || medico.getNome().trim().isEmpty()) {
+            throw new IllegalArgumentException("O campo Nome é obrigatório.");
+        }
+        if (medico.getCpf() == null || medico.getCpf().trim().isEmpty()) {
+            throw new IllegalArgumentException("O campo CPF é obrigatório.");
+        }
+        if (medico.getCrm() == null || medico.getCrm().trim().isEmpty()) {
+            throw new IllegalArgumentException("O campo CRM é obrigatório.");
+        }
+        if (medico.getEmail() == null || medico.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("O campo E-mail é obrigatório.");
+        }
+        if (medico.getEspecialidades() == null || medico.getEspecialidades().isEmpty()) {
+            throw new IllegalArgumentException("O médico deve possuir pelo menos uma especialidade.");
+        }
+    }
 }
