@@ -43,24 +43,24 @@ public class PaginaPrincipalControle {
 		model.addAttribute("medicos", medicos);
 		return "listagemMedico";
 	}
-//	
-//	@GetMapping("/removerMedico")
-//	public String removerMedico(String cpf, Model model){
-//		System.out.println("remover medico de cpf: " + cpf);
-//		bancoDados.remover(cpf);
-//		return "redirect: /listagemMedico";
-//	}
-//	
-//	@GetMapping("/editarMedico")
-//	public String mostraPaginaEdicaoMedico(String cpf, Model model) {
-//		Medico medicoEsperado = bancoDados.encontrar(cpf);
-//		model.addAttribute("medicoEncontrado", medicoEsperado);
-//		return "edicaoMedico";
-//	}
-//	
-//	public String processarEdicaoMedicos(Medico medico, Model model) {
-//		bancoDados.alterar(medico);
-//		List<Medico> medicos = bancoDados.listarTodos();
-//		return "listagemMedico";
-//	}
+	
+	@GetMapping("/removerMedico")
+	public String removerMedico(String cpf){		
+		dao.remover(cpf);
+		return "listagemMedico";
+	}
+	
+	@GetMapping("/editarMedico")
+	public String mostraPaginaEdicaoMedico(String cpf, Model model) {
+		Medico medicoEsperado = dao.buscarPorCpf(cpf);
+		model.addAttribute("medicoEncontrado", medicoEsperado);
+		model.addAttribute("especialidades", Especialidade.values());
+		return "edicaoMedico";
+	}
+	
+	@PostMapping("edicaoMedico")
+	public String processarEdicaoMedicos(Medico medico, Model model) {
+		dao.alterar(medico);
+		return "listagemMedico";
+	}
 }
