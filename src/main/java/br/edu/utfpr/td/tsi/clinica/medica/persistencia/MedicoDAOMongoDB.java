@@ -1,22 +1,15 @@
 package br.edu.utfpr.td.tsi.clinica.medica.persistencia;
 
 import java.util.ArrayList;
-
 import java.util.List;
-
-
 import org.bson.Document;
-
 import org.springframework.stereotype.Repository;
-
-
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
-
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Especialidade;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
 
@@ -44,7 +37,7 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 	public void salvar(Medico medico) {
 		validarCamposObrigatorios(medico);
 		
-		if(buscarPorCpf(medico.getCpf()) != null) {
+		if(buscarPorId(medico.getCpf()) != null) {
 			throw new IllegalArgumentException("Já existe um médico cadastrado com este CPF!");
 		}
 		if(buscarPorCrm(medico.getCrm()) != null) {
@@ -59,13 +52,13 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 	}
 
 	public void alterar(Medico medicoAtualizado) {
-		Document filtro = new Document("cpf", medicoAtualizado.getCpf());
+		Document filtro = new Document("id", medicoAtualizado.getId());
 		Document novo = new Document("$set", toDocument(medicoAtualizado));
 		collection.updateOne(filtro, novo);
 	}
 
-	public void remover(String cpf) {
-		collection.deleteOne(new Document("cpf", cpf));
+	public void remover(String id) {
+		collection.deleteOne(new Document("id", id));
 	}
 
 	public List<Medico> listarTodos() {
@@ -78,6 +71,7 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 
 	private Document toDocument(Medico medico) {
 		return new Document()
+			.append("id", medico.getId())
 			.append("nome", medico.getNome())
 			.append("email", medico.getEmail())
 			.append("cpf", medico.getCpf())
@@ -94,6 +88,8 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 
 	private Medico fromDocument(Document doc) {
 		Medico medico = new Medico();
+		
+		medico.setId(doc.getString("id"));
 		medico.setNome(doc.getString("nome"));
 		medico.setEmail(doc.getString("email"));
 		medico.setCpf(doc.getString("cpf"));
@@ -111,8 +107,8 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 		return medico;
 	}
 	
-	public Medico buscarPorCpf(String cpf) {
-		Document doc = collection.find(new Document("cpf", cpf)).first();
+	public Medico buscarPorId(String id) {
+		Document doc = collection.find(new Document("id", id)).first();
 		return doc != null ? fromDocument(doc) : null;
 	}
 	

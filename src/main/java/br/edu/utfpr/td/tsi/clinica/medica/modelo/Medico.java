@@ -15,8 +15,7 @@ public class Medico {
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	
+	}	
 	public String getNome() {
 		return nome;
 	}
@@ -40,16 +39,13 @@ public class Medico {
 	}
 	public void setCrm(String crm) {
 		this.crm = crm;
-	}
-	
+	}	
 	public List<Especialidade> getEspecialidades() {
 		return especialidades;
 	}
-
 	public void setEspecialidades(List<Especialidade> especialidades) {
 		this.especialidades = especialidades;
 	}
-
 	@Override
 	public String toString() {
 		return "Medico [nome=" + nome + ", email=" + email + ", cpf=" + cpf + ", crm=" + crm + ", especialidades="

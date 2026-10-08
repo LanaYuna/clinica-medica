@@ -71,12 +71,12 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center gap-3">
 
-                                <a th:href="@{/editarMedico(cpf=${medico.cpf})}"
+                                <a th:href="@{/editarMedico(id=${medico.id})}"
                                    class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
                                     Editar
                                 </a>
 
-                                <a th:href="@{/removerMedico(cpf=${medico.cpf})}" onclick="return confirm('Tem certeza que deseja remover este médico?')"
+                                <a th:href="@{/removerMedico(id=${medico.id})}" onclick="return confirm('Tem certeza que deseja remover este médico?')"
                                    class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
                                     Remover
                                 </a>
