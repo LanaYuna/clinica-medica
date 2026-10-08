@@ -1,13 +1,13 @@
 package br.edu.utfpr.td.tsi.clinica.medica.controle;
 
 import java.util.List;
-
+import java.util.UUID;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Especialidade;
 import br.edu.utfpr.td.tsi.clinica.medica.persistencia.MedicoDAO;
@@ -32,6 +32,7 @@ public class PaginaPrincipalControle {
 	
 	@PostMapping("cadastroMedico")
 	public String receberFormMedico(Medico medico) {
+		medico.setId(UUID.randomUUID().toString());
 		dao.salvar(medico); 
 		return "paginaPrincipal";
 	}
@@ -44,14 +45,14 @@ public class PaginaPrincipalControle {
 	}
 	
 	@GetMapping("/removerMedico")
-	public String removerMedico(String cpf){		
-		dao.remover(cpf);
-		return "listagemMedico";
+	public String removerMedico(@RequestParam String id){		
+		dao.remover(id);
+		return "redirect:/listagemMedico";
 	}
 	
 	@GetMapping("/editarMedico")
-	public String mostraPaginaEdicaoMedico(String cpf, Model model) {
-		Medico medicoEsperado = dao.buscarPorCpf(cpf);
+	public String mostraPaginaEdicaoMedico(@RequestParam String id, Model model) {
+		Medico medicoEsperado = dao.buscarPorId(id);
 		model.addAttribute("medicoEncontrado", medicoEsperado);
 		model.addAttribute("especialidades", Especialidade.values());
 		return "edicaoMedico";
