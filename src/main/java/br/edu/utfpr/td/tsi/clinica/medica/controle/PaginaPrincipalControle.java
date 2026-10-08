@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Especialidade;
-import br.edu.utfpr.td.tsi.clinica.medica.persistencia.BancoDados;
 import br.edu.utfpr.td.tsi.clinica.medica.persistencia.MedicoDAO;
 
 @Controller
@@ -61,6 +60,6 @@ public class PaginaPrincipalControle {
 	@PostMapping("edicaoMedico")
 	public String processarEdicaoMedicos(Medico medico, Model model) {
 		dao.alterar(medico);
-		return "listagemMedico";
+		return "redirect:/listagemMedico";
 	}
 }
