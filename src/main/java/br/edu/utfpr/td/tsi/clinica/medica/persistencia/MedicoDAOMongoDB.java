@@ -1,20 +1,15 @@
 package br.edu.utfpr.td.tsi.clinica.medica.persistencia;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
-import java.util.UUID;
+
 
 import org.bson.Document;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+
 import org.springframework.stereotype.Repository;
 
-import com.mongodb.client.FindIterable;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
