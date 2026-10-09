@@ -27,31 +27,17 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 		this.database = mongoClient.getDatabase("clinica-medica");
 		this.collection = database.getCollection("medico");
 		
-		try {
-	        this.collection.createIndex(Indexes.ascending("cpf"), new IndexOptions().unique(true));
-	        this.collection.createIndex(Indexes.ascending("crm"), new IndexOptions().unique(true));
-	        this.collection.createIndex(Indexes.ascending("email"), new IndexOptions().unique(true));
-	    } catch (Exception e) {
-	        System.err.println("Aviso: Não foi possível criar os índices únicos no MongoDB: " + e.getMessage());
-	    }
+		
+        this.collection.createIndex(Indexes.ascending("cpf"), new IndexOptions().unique(true));
+        this.collection.createIndex(Indexes.ascending("crm"), new IndexOptions().unique(true));
+        this.collection.createIndex(Indexes.ascending("email"), new IndexOptions().unique(true));
+
 	}
 
-	@Override
-	public void salvar(Medico medico) {
-		
-		if(buscarPorId(medico.getCpf()) != null) {
-			throw new IllegalArgumentException("Já existe um médico cadastrado com este CPF!");
-		}
-		if(buscarPorCrm(medico.getCrm()) != null) {
-			throw new IllegalArgumentException("Já existe um médico cadastrado com este CRM!");
-		}
-		if(buscarPorEmail(medico.getEmail()) != null) {
-			throw new IllegalArgumentException("Já existe um médico cadastrado com este E-mail!");
-		}
-		
-		Document doc = toDocument(medico);
-		collection.insertOne(doc);
-	}
+    @Override
+    public void salvar(Medico medico) {
+        collection.insertOne(toDocument(medico));
+    }
 
 	@Override
 	public void alterar(Medico medicoAtualizado) {
@@ -73,6 +59,32 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 		}
 		return lista;
 	}
+	@Override
+    public Medico buscarPorId(String id) {
+        return buscarPorCampo("id", id);
+    }
+
+    @Override
+    public Medico buscarPorCpf(String cpf) {
+        return buscarPorCampo("cpf", cpf);
+    }
+
+    @Override
+    public Medico buscarPorCrm(String crm) {
+        return buscarPorCampo("crm", crm);
+    }
+
+    @Override
+    public Medico buscarPorEmail(String email) {
+        return buscarPorCampo("email", email);
+    }
+    private Medico buscarPorCampo(String campo, String valor) {
+        Document doc = collection.find(
+            new Document(campo, valor)
+        ).first();
+
+        return doc != null ? fromDocument(doc) : null;
+    }    
 
 	private Document toDocument(Medico medico) {
 		return new Document()
@@ -111,20 +123,5 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 		}
 		return medico;
 	}
-	
-	public Medico buscarPorId(String id) {
-		Document doc = collection.find(new Document("id", id)).first();
-		return doc != null ? fromDocument(doc) : null;
-	}
-	
-	public Medico buscarPorCrm(String crm) {
-		Document doc = collection.find(new Document("crm", crm)).first();
-		return doc != null ? fromDocument(doc) : null;
-	}
-	
-	public Medico buscarPorEmail(String email) {
-		Document doc = collection.find(new Document("email", email)).first();
-		return doc != null ? fromDocument(doc) : null;
-	}
-	
+		
 }

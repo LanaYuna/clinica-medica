@@ -16,17 +16,6 @@ public class MedicoDAOMemoria implements MedicoDAO {
 
     @Override
     public void salvar(Medico medico) {
-    	
-    	if(buscarPorCpf(medico.getCpf()) != null) {
-			throw new IllegalArgumentException("Já existe um médico cadastrado com este CPF!");
-		}
-		if(buscarPorCrm(medico.getCrm()) != null) {
-			throw new IllegalArgumentException("Já existe um médico cadastrado com este CRM!");
-		}
-		if(buscarPorEmail(medico.getEmail()) != null) {
-			throw new IllegalArgumentException("Já existe um médico cadastrado com este E-mail!");
-		}
-		
         lista.add(medico);
     }
     
@@ -37,14 +26,16 @@ public class MedicoDAOMemoria implements MedicoDAO {
 				.findFirst()
 				.orElse(null);
 	}
-
+	
+	@Override
     public Medico buscarPorCpf(String cpf) {
         return lista.stream()
                 .filter(m -> m.getCpf() != null && m.getCpf().equals(cpf))
                 .findFirst()
                 .orElse(null);
     }
-    
+	
+	@Override
     public Medico buscarPorCrm(String crm) {
     	return lista.stream()
                 .filter(m -> m.getCrm() != null && m.getCrm().equals(crm))
@@ -52,6 +43,7 @@ public class MedicoDAOMemoria implements MedicoDAO {
                 .orElse(null);
     }
     
+	@Override
     public Medico buscarPorEmail(String email) {
     	return lista.stream()
                 .filter(m -> m.getEmail() != null && m.getEmail().equals(email))
