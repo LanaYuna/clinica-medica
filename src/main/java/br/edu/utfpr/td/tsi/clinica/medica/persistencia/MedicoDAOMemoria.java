@@ -2,6 +2,7 @@ package br.edu.utfpr.td.tsi.clinica.medica.persistencia;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -21,35 +22,36 @@ public class MedicoDAOMemoria implements MedicoDAO {
     
 	@Override
 	public Medico buscarPorId(String id) {
-		return lista.stream()
-				.filter(m -> m.getId() != null && m.getId().equals(id))
-				.findFirst()
-				.orElse(null);
+		return buscarPorCampo(Medico::getId, id);
 	}
 	
 	@Override
     public Medico buscarPorCpf(String cpf) {
-        return lista.stream()
-                .filter(m -> m.getCpf() != null && m.getCpf().equals(cpf))
-                .findFirst()
-                .orElse(null);
+		return buscarPorCampo(Medico::getCpf, cpf);
     }
 	
 	@Override
     public Medico buscarPorCrm(String crm) {
-    	return lista.stream()
-                .filter(m -> m.getCrm() != null && m.getCrm().equals(crm))
-                .findFirst()
-                .orElse(null);
+		return buscarPorCampo(Medico::getCrm, crm);
     }
     
 	@Override
     public Medico buscarPorEmail(String email) {
-    	return lista.stream()
-                .filter(m -> m.getEmail() != null && m.getEmail().equals(email))
-                .findFirst()
-                .orElse(null);
+    	return buscarPorCampo(Medico::getEmail, email);
     }
+	
+	private Medico buscarPorCampo(Function<Medico, String> extratorDeCampo, String valorBuscado) {
+	    if (valorBuscado == null) {
+	        return null;
+	    }
+	    return lista.stream()
+	            .filter(m -> {
+	                String valorDoMedico = extratorDeCampo.apply(m);
+	                return valorDoMedico != null && valorDoMedico.equals(valorBuscado);
+	            })
+	            .findFirst()
+	            .orElse(null);
+	}
 
     @Override
     public void remover(String id) {
