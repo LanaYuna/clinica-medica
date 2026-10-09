@@ -17,6 +17,7 @@ public class MedicoServiceImpl implements MedicoService{
 	@Override
 	public void salvar(Medico medico) {
 		validarCamposObrigatorios(medico);
+		validarUnicidade(medico);
 		dao.salvar(medico);
 	}
 
@@ -37,10 +38,13 @@ public class MedicoServiceImpl implements MedicoService{
 
 	@Override
 	public void alterar(Medico medico) {
+		validarCamposObrigatorios(medico);
+		validarUnicidade(medico);
+		
 		dao.alterar(medico);
 	}
 
-	private void validarCamposObrigatorios(Medico medico) {
+	private void validarCamposObrigatorios(Medico medico) {	
 		if (medico == null) {
             throw new IllegalArgumentException("O objeto médico não pode ser nulo.");
         }
@@ -60,4 +64,32 @@ public class MedicoServiceImpl implements MedicoService{
             throw new IllegalArgumentException("O médico deve possuir pelo menos uma especialidade.");
         }
 	}
+	private void validarUnicidade(Medico medico) {
+        Medico encontrado = dao.buscarPorCpf(medico.getCpf());
+
+        if (encontrado != null &&
+            !encontrado.getId().equals(medico.getId())) {
+            throw new IllegalArgumentException(
+                "Já existe um médico cadastrado com este CPF!"
+            );
+        }
+
+        encontrado = dao.buscarPorCrm(medico.getCrm());
+
+        if (encontrado != null &&
+            !encontrado.getId().equals(medico.getId())) {
+            throw new IllegalArgumentException(
+                "Já existe um médico cadastrado com este CRM!"
+            );
+        }
+
+        encontrado = dao.buscarPorEmail(medico.getEmail());
+
+        if (encontrado != null &&
+            !encontrado.getId().equals(medico.getId())) {
+            throw new IllegalArgumentException(
+                "Já existe um médico cadastrado com este E-mail!"
+            );
+        }
+    }
 }
