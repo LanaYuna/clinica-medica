@@ -3,6 +3,7 @@ package br.edu.utfpr.td.tsi.clinica.medica.persistencia;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -14,6 +15,7 @@ import br.edu.utfpr.td.tsi.clinica.medica.modelo.Especialidade;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
 
 @Repository
+@Profile("mongoDB")
 public class MedicoDAOMongoDB implements MedicoDAO {
 
 	private final MongoClient mongoClient;
@@ -34,8 +36,8 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 	    }
 	}
 
+	@Override
 	public void salvar(Medico medico) {
-		validarCamposObrigatorios(medico);
 		
 		if(buscarPorId(medico.getCpf()) != null) {
 			throw new IllegalArgumentException("Já existe um médico cadastrado com este CPF!");
@@ -51,16 +53,19 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 		collection.insertOne(doc);
 	}
 
+	@Override
 	public void alterar(Medico medicoAtualizado) {
 		Document filtro = new Document("id", medicoAtualizado.getId());
 		Document novo = new Document("$set", toDocument(medicoAtualizado));
 		collection.updateOne(filtro, novo);
 	}
 
+	@Override
 	public void remover(String id) {
 		collection.deleteOne(new Document("id", id));
 	}
 
+	@Override
 	public List<Medico> listarTodos() {
 		List<Medico> lista = new ArrayList<>();
 		for (Document doc : collection.find()) {
@@ -122,24 +127,4 @@ public class MedicoDAOMongoDB implements MedicoDAO {
 		return doc != null ? fromDocument(doc) : null;
 	}
 	
-	private void validarCamposObrigatorios(Medico medico) {
-        if (medico == null) {
-            throw new IllegalArgumentException("O objeto médico não pode ser nulo.");
-        }
-        if (medico.getNome() == null || medico.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("O campo Nome é obrigatório.");
-        }
-        if (medico.getCpf() == null || medico.getCpf().trim().isEmpty()) {
-            throw new IllegalArgumentException("O campo CPF é obrigatório.");
-        }
-        if (medico.getCrm() == null || medico.getCrm().trim().isEmpty()) {
-            throw new IllegalArgumentException("O campo CRM é obrigatório.");
-        }
-        if (medico.getEmail() == null || medico.getEmail().trim().isEmpty()) {
-            throw new IllegalArgumentException("O campo E-mail é obrigatório.");
-        }
-        if (medico.getEspecialidades() == null || medico.getEspecialidades().isEmpty()) {
-            throw new IllegalArgumentException("O médico deve possuir pelo menos uma especialidade.");
-        }
-    }
 }
