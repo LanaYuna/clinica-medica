@@ -78,6 +78,7 @@ public class MedicoDAOMongoDB implements MedicoDAO {
     public Medico buscarPorEmail(String email) {
         return buscarPorCampo("email", email);
     }
+    
     private Medico buscarPorCampo(String campo, String valor) {
         Document doc = collection.find(
             new Document(campo, valor)
