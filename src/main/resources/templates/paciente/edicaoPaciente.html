@@ -1,10 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edição de Paciente</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
+
+<body class="min-h-screen bg-blue-50 flex items-center justify-center px-6 py-10">
+
+    <main class="w-full max-w-2xl bg-white rounded-3xl shadow-xl px-8 py-12 md:px-12">
+
+        <header class="text-center mb-10">
+
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-blue-900">
+                Edição de Paciente
+            </h1>
+
+            <p class="mt-4 text-base md:text-lg text-gray-500">
+                Atualize os dados do paciente.
+            </p>
+
+        </header>
+
+        <form action="/edicaoPaciente" method="POST" class="space-y-6">
+        
+		    <input type="hidden"
+		           name="id"
+		           th:value="${pacienteEncontrado.id}">    
+	
+			<section class="mb-8">    
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div class="flex flex-col">
+                        <label for="nome" class="font-medium text-gray-700">
+                            Nome Completo
+                        </label>
+                        <input type="text" 
+                        	   id="nome" 
+                        	   name="nome"
+                        	   th:value="${pacienteEncontrado.nome}"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label for="email" class="font-medium text-gray-700">
+                            E-mail
+                        </label>
+                        <input type="email" 
+                        	   id="email" 
+                        	   name="email"
+							   th:value="${pacienteEncontrado.email}"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label for="cpf" class="font-medium text-gray-700">
+                            CPF
+                        </label>
+                        <input type="text" 
+                        	   id="cpf" 
+                        	   name="cpf"
+                        	   th:value="${pacienteEncontrado.cpf}"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label for="dataNascimento" class="font-medium text-gray-700">
+                            Data de nascimento
+                        </label>
+                        <input type="date" 
+                        	   id="dataNascimento" 
+                        	   name="dataNascimento"
+                        	   th:value="${pacienteEncontrado.dataNascimento}"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+                    
+                    <div class="flex flex-col">
+                        <label for="telefone" class="font-medium text-gray-700">
+                            Telefone / Celular
+                        </label>
+                        <input type="text" 
+                        	   id="telefone" 
+                        	   name="telefone"
+                        	   th:value="${pacienteEncontrado.telefone}"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="mb-8">
+
+                <h2 class="text-lg font-semibold text-gray-700 border-b border-gray-300 pb-2 mb-5">
+                    Endereço
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-6 gap-4">
+                
+                  	<input type="hidden"
+		           		name="id"
+		           		th:value="${enderecoEncontrado.id}">    
+
+                    <div class="flex flex-col sm:col-span-2">
+                        <label for="cep" class="font-medium text-gray-700">
+                            CEP
+                        </label>
+                        <input type="text" 
+                        	   id="cep" 
+                        	   name="cep"
+                        	   th:value="${enderecoEncontrado.cep}"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+
+                    <div class="flex flex-col sm:col-span-3">
+                        <label for="logradouro" class="font-medium text-gray-700">
+                            Logradouro (Rua/Av.)
+                        </label>
+                        <input type="text" 
+                        	   id="logradouro" 
+                        	   name="logradouro"
+                        	   th:value="${enderecoEncontrado.logradouro}"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+
+                    <div class="flex flex-col sm:col-span-1">
+                        <label for="numero" class="font-medium text-gray-700">
+                            Número
+                        </label>
+                        <input type="text" 
+                        	   id="numero" 
+                        	   name="numero"
+                        	   th:value="${enderecoEncontrado.numero}"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+
+                    <div class="flex flex-col sm:col-span-2">
+                        <label for="complemento" class="font-medium text-gray-700">
+                            Complemento
+                        </label>
+                        <input type="text" 
+                        	   id="complemento" 
+                        	   name="complemento"
+                        	   th:value="${enderecoEncontrado.complemento}"
+                               placeholder="Apto, Bloco, etc."
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500">
+                    </div>
+
+                    <div class="flex flex-col sm:col-span-2">
+                        <label for="bairro" class="font-medium text-gray-700">
+                            Bairro
+                        </label>
+                        <input type="text" 
+                        	   id="bairro" 
+                        	   name="bairro"
+                        	   th:value="${enderecoEncontrado.bairro}"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+
+                    <div class="flex flex-col sm:col-span-2">
+                        <label for="cidadeUf" class="font-medium text-gray-700">
+                            Cidade / UF
+                        </label>
+                        <input type="text" 
+                        	   id="cidadeUf" 
+                        	   name="cidadeUf"
+                        	   th:value="${enderecoEncontrado.cidade}"
+                               placeholder="Ex.: Toledo / PR"
+                               class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
+                               required>
+                    </div>
+
+                </div>
+
+            </section>
+            
+
+            <div class="flex justify-center gap-3 pt-4">
+
+                <a href="listagemPaciente"
+                   class="inline-flex items-center bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold px-5 py-2.5 rounded-lg border border-blue-100 transition-all duration-200">
+                    Voltar
+                </a>
+
+                <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                    Salvar alterações
+                </button>
+
+            </div>
+
+        </form>
+
+    </main>
 
 </body>
+
 </html>
