@@ -26,7 +26,7 @@ public class PaginaPrincipalControle {
 	@GetMapping("cadastroMedico")
 	public String mostrarPaginaCadastroMedico(Model model) {
 		model.addAttribute("especialidades", Especialidade.values());
-		return "cadastroMedico";
+		return "medico/cadastroMedico";
 	}
 	
 	@PostMapping("cadastroMedico")
@@ -40,7 +40,7 @@ public class PaginaPrincipalControle {
 	public String mostrarPaginaListagemMedicos(Model model) {
 		List<Medico> medicos = medicoService.listarTodos();
 		model.addAttribute("medicos", medicos);
-		return "listagemMedico";
+		return "medico/listagemMedico";
 	}
 	
 	@GetMapping("/removerMedico")
@@ -54,7 +54,7 @@ public class PaginaPrincipalControle {
 		Medico medicoEsperado = medicoService.buscarPorId(id);
 		model.addAttribute("medicoEncontrado", medicoEsperado);
 		model.addAttribute("especialidades", Especialidade.values());
-		return "edicaoMedico";
+		return "medico/edicaoMedico";
 	}
 	
 	@PostMapping("edicaoMedico")
