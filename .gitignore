@@ -17,3 +17,4 @@ target/
 *.log
 .DS_Store
 Thumbs.db
+/bin/
