@@ -29,13 +29,13 @@ public class PacienteControle {
 	public String receberFormPaciente(Paciente paciente, Endereco endereco) {
 		paciente.setId(UUID.randomUUID().toString());
 		pacienteService.salvar(paciente, endereco);
-		return "paciente/cadastroPaciente";
+		return "paginaPrincipal";
 	}
 	
 	@GetMapping("listagemPaciente")
 	public String mostrarPaginaListagemPaciente(Model model) {
 		List<Paciente> pacientes = pacienteService.listarTodos();
-		model.addAttribute(pacientes);
+		model.addAttribute("pacientes", pacientes);
 		return "paciente/listagemPaciente";
 	}
 	
@@ -49,6 +49,7 @@ public class PacienteControle {
 	public String mostraPaginaEdicaoPaciente(@RequestParam("id") String id, Model model) {
 		Paciente pacienteEsperado = pacienteService.buscarPorId(id);
 		model.addAttribute("pacienteEncontrado", pacienteEsperado);
+		model.addAttribute("enderecoEncontrado", pacienteEsperado.getEndereco());
 		return "paciente/edicaoPaciente";
 	}
 	
