@@ -6,42 +6,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
-import br.edu.utfpr.td.tsi.clinica.medica.persistencia.MedicoDAO;
+import br.edu.utfpr.td.tsi.clinica.medica.persistencia.MedicoRepository;
 
 @Service
 public class MedicoServiceImpl implements MedicoService{
 	
 	@Autowired
-	private MedicoDAO dao;
+	private MedicoRepository medicoRepository;
 
 	@Override
 	public void salvar(Medico medico) {
 		validarCamposObrigatorios(medico);
 		validarUnicidade(medico);
-		dao.salvar(medico);
+		medicoRepository.save(medico);
 	}
 
 	@Override
 	public List<Medico> listarTodos() {
-		return dao.listarTodos();
+		return medicoRepository.findAll();
 	}
 
 	@Override
 	public Medico buscarPorId(String id) {
-		return dao.buscarPorId(id);
+		return medicoRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public void remover(String id) {
-		dao.remover(id);
+		medicoRepository.deleteById(id);
 	}
 
 	@Override
 	public void alterar(Medico medico) {
+		if (medico.getId() == null || !medicoRepository.existsById(medico.getId())) {
+			throw new IllegalArgumentException("Médico não encontrado para alteração.");
+		}
 		validarCamposObrigatorios(medico);
 		validarUnicidade(medico);
 		
-		dao.alterar(medico);
+		medicoRepository.save(medico);
 	}
 
 	private void validarCamposObrigatorios(Medico medico) {	
@@ -65,7 +68,7 @@ public class MedicoServiceImpl implements MedicoService{
         }
 	}
 	private void validarUnicidade(Medico medico) {
-        Medico encontrado = dao.buscarPorCpf(medico.getCpf());
+        Medico encontrado = medicoRepository.findByCpf(medico.getCpf());
 
         if (encontrado != null &&
             !encontrado.getId().equals(medico.getId())) {
@@ -74,7 +77,7 @@ public class MedicoServiceImpl implements MedicoService{
             );
         }
 
-        encontrado = dao.buscarPorCrm(medico.getCrm());
+        encontrado = medicoRepository.findByCrm(medico.getCrm());
 
         if (encontrado != null &&
             !encontrado.getId().equals(medico.getId())) {
@@ -83,7 +86,7 @@ public class MedicoServiceImpl implements MedicoService{
             );
         }
 
-        encontrado = dao.buscarPorEmail(medico.getEmail());
+        encontrado = medicoRepository.findByEmail(medico.getEmail());
 
         if (encontrado != null &&
             !encontrado.getId().equals(medico.getId())) {

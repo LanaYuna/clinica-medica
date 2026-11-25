@@ -18,6 +18,7 @@ public class GerenciadorExcecoes {
 
     @ExceptionHandler(Exception.class)
     public String tratarErroGenerico(Exception ex, Model model) {
+    	ex.printStackTrace();
         model.addAttribute("mensagemErro", "Ocorreu um erro interno no sistema. Tente novamente.");
         model.addAttribute("especialidades", Especialidade.values());
         return "medico/cadastroMedico";
