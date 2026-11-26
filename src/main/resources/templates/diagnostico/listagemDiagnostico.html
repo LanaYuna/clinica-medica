@@ -1,10 +1,235 @@
-	<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Consulta de Diagnósticos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
+
+<body class="bg-blue-50 min-h-screen">
+
+    <div th:if="${mensagemErro}"
+         class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-4 mx-auto max-w-6xl mt-4"
+         role="alert">
+        <strong class="font-bold">Atenção: </strong>
+        <span th:text="${mensagemErro}" class="block sm:inline"></span>
+    </div>
+
+    <div th:if="${mensagemSucesso}"
+         class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-4 mx-auto max-w-6xl mt-4"
+         role="alert">
+        <strong class="font-bold">Sucesso: </strong>
+        <span th:text="${mensagemSucesso}" class="block sm:inline"></span>
+    </div>
+
+    <div class="flex justify-center px-4 py-8">
+
+        <main class="bg-white p-6 sm:p-8 rounded-2xl shadow-md w-full max-w-6xl">
+
+            <h1 class="text-3xl font-bold text-center text-[#37636d] mb-8">
+                Consulta de Diagnósticos
+            </h1>
+
+            <!-- Filtros -->
+            <section class="border border-gray-200 rounded-2xl p-4 mb-6">
+
+                <h2 class="text-lg font-semibold text-[#37636d] mb-3">
+                    Filtrar Atendimentos
+                </h2>
+
+                <form action="/diagnosticos" method="GET">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+
+                        <div class="flex flex-col">
+                            <label for="idMedico" class="font-medium text-sm text-gray-600 mb-1">
+                                Médico Responsável
+                            </label>
+
+                            <select id="idMedico" name="idMedico"
+                                    class="rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#56858c]">
+                                <option value="">Todos os Médicos</option>
+
+                                <option th:each="medico : ${medicos}"
+                                        th:value="${medico.id}"
+                                        th:text="${medico.nome}"
+                                        th:selected="${param.idMedico != null and param.idMedico[0] == medico.id}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex flex-col">
+                            <label for="idPaciente" class="font-medium text-sm text-gray-600 mb-1">
+                                Paciente
+                            </label>
+
+                            <select id="idPaciente" name="idPaciente"
+                                    class="rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#56858c]">
+                                <option value="">Todos os Pacientes</option>
+
+                                <option th:each="paciente : ${pacientes}"
+                                        th:value="${paciente.id}"
+                                        th:text="${paciente.nome}"
+                                        th:selected="${param.idPaciente != null and param.idPaciente[0] == paciente.id}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex flex-col">
+                            <label for="tipoAtendimento" class="font-medium text-sm text-gray-600 mb-1">
+                                Tipo de Atendimento
+                            </label>
+
+                            <select id="tipoAtendimento" name="tipoAtendimento"
+                                    class="rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#56858c]">
+                                <option value="">Todos os Tipos</option>
+
+                                <option th:each="tipo : ${tiposAtendimento}"
+                                        th:value="${tipo.name()}"
+                                        th:text="${tipo.descricao}"
+                                        th:selected="${param.tipoAtendimento != null and param.tipoAtendimento[0] == tipo.name()}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="submit"
+                                    class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                                Filtrar
+                            </button>
+
+                            <a href="/diagnosticos"
+                               class="flex items-center justify-center px-3 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors"
+                               title="Limpar filtros">
+                                Limpar
+                            </a>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+            <section class="border border-gray-200 rounded-2xl overflow-hidden">
+
+                <div class="overflow-x-auto">
+
+                    <table class="w-full text-sm text-left text-gray-600">
+
+                        <thead class="bg-blue-600 text-white">
+                            <tr>
+                                <th class="px-4 py-3 font-semibold whitespace-nowrap">
+                                    Data/Hora
+                                </th>
+
+                                <th class="px-4 py-3 font-semibold whitespace-nowrap">
+                                    Paciente
+                                </th>
+
+                                <th class="px-4 py-3 font-semibold whitespace-nowrap">
+                                    Médico
+                                </th>
+
+                                <th class="px-4 py-3 font-semibold whitespace-nowrap">
+                                    Tipo
+                                </th>
+
+                                <th class="px-4 py-3 font-semibold whitespace-nowrap">
+                                    CID-10
+                                </th>
+
+                                <th class="px-4 py-3 font-semibold whitespace-nowrap">
+                                    Ações
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="diagnostico : ${diagnosticos}"
+                                class="border-b border-gray-100 hover:bg-blue-50 transition-colors">
+
+                                <td class="px-4 py-3 whitespace-nowrap"
+                                    th:text="${#temporals.format(diagnostico.dataHora, 'dd/MM/yyyy HH:mm')}">
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap"
+                                    th:text="${diagnostico.paciente.nome}">
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap"
+                                    th:text="${diagnostico.medico.nome}">
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <span th:text="${diagnostico.tipoAtendimento.descricao}"
+                                          class="inline-block bg-blue-100 text-blue-700 font-semibold text-xs px-2.5 py-1 rounded-full">
+                                    </span>
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap"
+                                    th:text="${diagnostico.cid10 != null and !diagnostico.cid10.isBlank() ? diagnostico.cid10 : '-'}">
+                                </td>
+
+                                <td class="px-4 py-3 whitespace-nowrap">
+
+                                    <div class="flex items-center gap-2">
+
+                                        <a th:href="@{/editarDiagnostico/{id}(id=${diagnostico.id})}"
+                                           class="bg-teal-100 text-teal-700 font-semibold text-xs px-3 py-1.5 rounded-md hover:bg-teal-200 transition-colors">
+                                            Editar
+                                        </a>
+
+                                        <form th:action="@{/removerDiagnostico/{id}(id=${diagnostico.id})}"
+                                              method="POST">
+
+                                            <button type="submit"
+                                                    onclick="confirm('Deseja realmente remover este diagnóstico?')"
+                                                    class="bg-red-100 text-red-600 font-semibold text-xs px-3 py-1.5 rounded-md hover:bg-red-200 transition-colors">
+                                                Remover
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            <tr th:if="${#lists.isEmpty(diagnosticos)}">
+                                <td colspan="6" class="text-center py-8 text-gray-500">
+                                    Nenhum diagnóstico encontrado.
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
+
+                <a href="/inicio"
+                   class="text-[#56858c] font-semibold hover:text-[#365d65] transition-colors">
+                    ← Voltar ao Menu
+                </a>
+
+                <a href="/cadastroDiagnostico"
+                   class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                    + Novo Diagnóstico
+                </a>
+
+            </div>
+
+        </main>
+
+    </div>
 
 </body>
 </html>
