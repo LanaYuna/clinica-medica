@@ -74,8 +74,14 @@ public class DiagnosticoControle {
 	@GetMapping("/editarDiagnostico")
 	public String mostraPaginaEdicaoDiagnostico(@RequestParam("id") String id, Model model) {
 		Diagnostico diagnosticoEsperado = diagnosticoService.buscarPorId(id);
-		// falta exibir paciente e medico
+		List<Medico> medicos = medicoService.listarTodos();
+		List<Paciente> pacientes = pacienteService.listarTodos();
+		List<TipoAtendimento> atendimentos = List.of(TipoAtendimento.values());
+		
 		model.addAttribute("diagnosticoEncontrado", diagnosticoEsperado);
+		model.addAttribute("medicos", medicos);
+		model.addAttribute("pacientes", pacientes);
+		model.addAttribute("tiposAtendimento", atendimentos);
 		return "diagnostico/edicaoDiagnostico";
 	}
 	

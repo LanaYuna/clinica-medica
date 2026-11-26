@@ -38,7 +38,7 @@
                 
                 <input type="hidden"
 		           name="id"
-		           th:value="${medicoEncontrado.id}">        
+		           th:value="${diagnosticoEncontrado.id}">        
                 
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -50,10 +50,12 @@
                         <select id="idMedico" name="idMedico"
                                 class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
                                 required>
-                            <option value="">Selecione</option>
+                            
                             <option th:each="medico : ${medicos}"
                                     th:value="${medico.id}"
-                                    th:text="${medico.nome}"></option>
+                                    th:text="${medico.nome}"
+                                    th:selected="${medico.id == diagnosticoEncontrado.idMedico}">
+							</option>
                         </select>
                     </div>
 
@@ -64,10 +66,12 @@
                         <select id="idPaciente" name="idPaciente"
                                 class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
                                 required>
-                            <option value="">Selecione...</option>
+                            
                             <option th:each="paciente : ${pacientes}"
                                     th:value="${paciente.id}"
-                                    th:text="${paciente.nome}"></option>
+                                    th:text="${paciente.nome}"
+                                    th:selected="${paciente.id == diagnosticoEncontrado.idPaciente}">
+							</option>
                         </select>
                     </div>
 
@@ -75,7 +79,10 @@
                         <label for="dataHora" class="font-medium text-gray-700">
                             Data e hora
                         </label>
-                        <input type="datetime-local" id="dataHora" name="dataHora"
+                        <input type="datetime-local" 
+                        	   id="dataHora" 
+                        	   name="dataHora"
+                        	   th:value="${#temporals.format(diagnosticoEncontrado.dataHora, 'yyyy-MM-dd''T''HH:mm')}"
                                class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
                                required>
                     </div>
@@ -87,10 +94,12 @@
                         <select id="tipoAtendimento" name="tipoAtendimento"
                                 class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
                                 required>
-                            <option value="">Selecione...</option>
+                                
                             <option th:each="tipo : ${tiposAtendimento}"
                                     th:value="${tipo.name()}"
-                                    th:text="${tipo.descricao}"></option>
+                                    th:text="${tipo.descricao}"
+                                    th:selected="${tipo == diagnosticoEncontrado.tipoAtendimento}">
+							</option>
                         </select>
                     </div>
 
@@ -110,8 +119,10 @@
                         <label for="cid10" class="font-medium text-gray-700">
                             CID-10 (opcional)
                         </label>
-                        <input type="text" id="cid10" name="cid10"
-                               placeholder="Ex.: J00 ou J00.0"
+                        <input type="text" 
+                        	   id="cid10" 
+                        	   name="cid10"
+                        	   th:value="${diagnosticoEncontrado.cid10}"
                                class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500">
                     </div>
 
@@ -119,7 +130,10 @@
                         <label for="descricao" class="font-medium text-gray-700">
                             Descrição
                         </label>
-                        <textarea id="descricao" name="descricao" rows="3"
+                        <textarea id="descricao" 
+                        	      name="descricao" 
+                        	      rows="3"
+                        	      th:text="${diagnosticoEncontrado.descricao}"
                                   class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
                                   required></textarea>
                     </div>
@@ -128,7 +142,10 @@
                         <label for="sintomas" class="font-medium text-gray-700">
                             Sintomas
                         </label>
-                        <textarea id="sintomas" name="sintomas" rows="3"
+                        <textarea id="sintomas" 
+                        		  name="sintomas" 
+                        		  rows="3"
+                        		  th:text="${diagnosticoEncontrado.sintomas}"
                                   class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
                                   required></textarea>
                     </div>
@@ -137,7 +154,10 @@
                         <label for="medicamentos" class="font-medium text-gray-700">
                             Medicamentos
                         </label>
-                        <textarea id="medicamentos" name="medicamentos" rows="3"
+                        <textarea id="medicamentos" 
+                        		  name="medicamentos" 
+                        		  rows="3"
+                        		  th:text="${diagnosticoEncontrado.medicamentos}"
                                   class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
                                   required></textarea>
                     </div>
@@ -146,7 +166,10 @@
                         <label for="observacoes" class="font-medium text-gray-700">
                             Observações
                         </label>
-                        <textarea id="observacoes" name="observacoes" rows="3"
+                        <textarea id="observacoes" 
+                        		  name="observacoes" 
+                        		  rows="3"
+                        		  th:text="${diagnosticoEncontrado.observacoes}"
                                   class="mt-2 rounded-lg shadow-sm border border-gray-300 p-2 focus:outline-blue-500"
                                   required></textarea>
                     </div>
@@ -155,10 +178,19 @@
 
             </section>
 
-            <button type="submit"
-                    class="w-full mt-8 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-                Salvar
-            </button>
+            <div class="flex justify-center gap-3 pt-4">
+
+                <a th:href="@{/listagemDiagnostico}"
+                   class="inline-flex items-center bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold px-5 py-2.5 rounded-lg border border-blue-100 transition-all duration-200">
+                    Voltar
+                </a>
+
+                <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                    Salvar alterações
+                </button>
+
+            </div>
 
         </form>
 

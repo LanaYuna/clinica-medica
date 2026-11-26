@@ -2,14 +2,19 @@ package br.edu.utfpr.td.tsi.clinica.medica.modelo;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Paciente {
 	private String id;
 	private String nome;
 	private String email;
 	private String cpf;
-	private LocalDate dataNascimento; // ???
-	private String telefone; //???
-	private Endereco endereco; // chave estrangeira
+	
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate dataNascimento; 
+	
+	private String telefone; 
+	private Endereco endereco;
 	
 	public String getId() {
 		return id;
