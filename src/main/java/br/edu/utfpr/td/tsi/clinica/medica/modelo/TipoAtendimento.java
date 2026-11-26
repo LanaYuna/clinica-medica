@@ -1,5 +1,7 @@
 package br.edu.utfpr.td.tsi.clinica.medica.modelo;
 
+import java.util.List;
+
 public enum TipoAtendimento {
 
 	CONSULTA("Consulta"),
