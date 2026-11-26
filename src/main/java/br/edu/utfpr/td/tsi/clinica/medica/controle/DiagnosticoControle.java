@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import br.edu.utfpr.td.tsi.clinica.medica.dto.DiagnosticoListagemDTO;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Diagnostico;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Especialidade;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
@@ -39,7 +40,7 @@ public class DiagnosticoControle {
 		
 		model.addAttribute("medicos", medicos);
 		model.addAttribute("pacientes", pacientes);
-		model.addAttribute("atendimentos", atendimentos);
+		model.addAttribute("tiposAtendimento", atendimentos);
 		return "diagnostico/cadastroDiagnostico";
 	}
 	
@@ -52,8 +53,15 @@ public class DiagnosticoControle {
 	
 	@GetMapping("listagemDiagnostico")
 	public String mostrarPaginaListagemMedicos(Model model) {
-		List<Diagnostico> diagnosticos = diagnosticoService.listarTodos();
+		List<Medico> medicos = medicoService.listarTodos();
+		List<Paciente> pacientes = pacienteService.listarTodos();
+		List<TipoAtendimento> atendimentos = List.of(TipoAtendimento.values());
+		List<DiagnosticoListagemDTO> diagnosticos = diagnosticoService.listarParaListagem();
+		
 		model.addAttribute("diagnosticos", diagnosticos);
+		model.addAttribute("medicos", medicos);
+		model.addAttribute("pacientes", pacientes);
+		model.addAttribute("tiposAtendimento", atendimentos);
 		return "diagnostico/listagemDiagnostico";
 	}
 	

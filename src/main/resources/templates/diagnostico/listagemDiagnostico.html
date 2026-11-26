@@ -31,7 +31,6 @@
                 Consulta de Diagnósticos
             </h1>
 
-            <!-- Filtros -->
             <section class="border border-gray-200 rounded-2xl p-4 mb-6">
 
                 <h2 class="text-lg font-semibold text-[#37636d] mb-3">
@@ -152,46 +151,42 @@
                                 class="border-b border-gray-100 hover:bg-blue-50 transition-colors">
 
                                 <td class="px-4 py-3 whitespace-nowrap"
-                                    th:text="${#temporals.format(diagnostico.dataHora, 'dd/MM/yyyy HH:mm')}">
+                                    th:text="${#temporals.format(diagnostico.diagnostico.dataHora, 'dd/MM/yyyy HH:mm')}">
                                 </td>
 
                                 <td class="px-4 py-3 whitespace-nowrap"
-                                    th:text="${diagnostico.paciente.nome}">
+                                    th:text="${diagnostico.nomePaciente}">
                                 </td>
 
                                 <td class="px-4 py-3 whitespace-nowrap"
-                                    th:text="${diagnostico.medico.nome}">
+                                    th:text="${diagnostico.nomeMedico}">
                                 </td>
 
                                 <td class="px-4 py-3 whitespace-nowrap">
-                                    <span th:text="${diagnostico.tipoAtendimento.descricao}"
+                                    <span th:text="${diagnostico.diagnostico.tipoAtendimento.descricao}"
                                           class="inline-block bg-blue-100 text-blue-700 font-semibold text-xs px-2.5 py-1 rounded-full">
                                     </span>
                                 </td>
 
                                 <td class="px-4 py-3 whitespace-nowrap"
-                                    th:text="${diagnostico.cid10 != null and !diagnostico.cid10.isBlank() ? diagnostico.cid10 : '-'}">
+                                    th:text="${diagnostico.diagnostico.cid10 != null and !diagnostico.diagnostico.cid10.isBlank() ? diagnostico.diagnostico.cid10 : '-'}">
                                 </td>
 
                                 <td class="px-4 py-3 whitespace-nowrap">
 
                                     <div class="flex items-center gap-2">
 
-                                        <a th:href="@{/editarDiagnostico/{id}(id=${diagnostico.id})}"
+                                        <a th:href="@{/editarDiagnostico(id=${diagnostico.diagnostico.id})}"
                                            class="bg-teal-100 text-teal-700 font-semibold text-xs px-3 py-1.5 rounded-md hover:bg-teal-200 transition-colors">
                                             Editar
                                         </a>
 
-                                        <form th:action="@{/removerDiagnostico/{id}(id=${diagnostico.id})}"
-                                              method="POST">
+ 
+                                        <a th:href="@{/removerDiagnostico(id=${diagnostico.diagnostico.id})}" onclick="confirm('Deseja realmente remover este diagnóstico?')"
+										   class="bg-red-100 text-red-600 font-semibold text-xs px-3 py-1.5 rounded-md hover:bg-red-200 transition-colors">
+                                            Remover
+                                        </a>
 
-                                            <button type="submit"
-                                                    onclick="confirm('Deseja realmente remover este diagnóstico?')"
-                                                    class="bg-red-100 text-red-600 font-semibold text-xs px-3 py-1.5 rounded-md hover:bg-red-200 transition-colors">
-                                                Remover
-                                            </button>
-
-                                        </form>
 
                                     </div>
 
