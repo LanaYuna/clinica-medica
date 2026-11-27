@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.utfpr.td.tsi.clinica.medica.controle.excecao.ValidacaoException;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Endereco;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Paciente;
 import br.edu.utfpr.td.tsi.clinica.medica.persistencia.PacienteRepository;
@@ -40,7 +41,7 @@ public class PacienteServiceImpl implements PacienteService {
 	@Override
 	public void alterar(Paciente paciente) {
 		if (paciente.getId() == null || !pacienteRepository.existsById(paciente.getId())) {
-			throw new IllegalArgumentException("Paciente não encontrado para alteração.");
+			throw new ValidacaoException("Paciente não encontrado para alteração.", null);
 		}
 		
 		Endereco endereco = paciente.getEndereco();
@@ -52,48 +53,34 @@ public class PacienteServiceImpl implements PacienteService {
 
 	private void validarCamposObrigatorios(Paciente paciente) {
 		if (paciente == null) {
-			throw new IllegalArgumentException("O objeto paciente não pode ser nulo.");
+			throw new ValidacaoException("O objeto paciente não pode ser nulo.", null);
 		}
-		if (estaVazio(paciente.getNome())) {
-			throw new IllegalArgumentException("O campo Nome é obrigatório.");
-		}
-		if (estaVazio(paciente.getCpf())) {
-			throw new IllegalArgumentException("O campo CPF é obrigatório.");
-		}
-		if (estaVazio(paciente.getEmail())) {
-			throw new IllegalArgumentException("O campo E-mail é obrigatório.");
-		}
-		if (estaVazio(paciente.getTelefone())) {
-			throw new IllegalArgumentException("O campo Telefone é obrigatório.");
-		}
+		exigir(estaVazio(paciente.getNome()), "O campo Nome é obrigatório.", paciente);
+	    exigir(estaVazio(paciente.getCpf()), "O campo CPF é obrigatório.", paciente);
+	    exigir(estaVazio(paciente.getEmail()), "O campo E-mail é obrigatório.", paciente);
+	    exigir(estaVazio(paciente.getTelefone()), "O campo Telefone é obrigatório.", paciente);
 
-		Endereco endereco = paciente.getEndereco();
-		if (endereco == null) {
-			throw new IllegalArgumentException("O endereço é obrigatório.");
-		}
-		if (estaVazio(endereco.getCep())) {
-			throw new IllegalArgumentException("O campo CEP é obrigatório.");
-		}
-		if (estaVazio(endereco.getLogradouro())) {
-			throw new IllegalArgumentException("O campo Logradouro é obrigatório.");
-		}
-		if (endereco.getNumero() <= 0) {
-			throw new IllegalArgumentException("O campo Número é obrigatório e deve ser maior que zero.");
-		}
-		if (estaVazio(endereco.getBairro())) {
-			throw new IllegalArgumentException("O campo Bairro é obrigatório.");
-		}
-		if (estaVazio(endereco.getCidadeUf())) {
-		    throw new IllegalArgumentException("O campo Cidade é obrigatório.");
-		}
+	    Endereco endereco = paciente.getEndereco();
+	    exigir(endereco == null, "O endereço é obrigatório.", paciente);
+	    exigir(estaVazio(endereco.getCep()), "O campo CEP é obrigatório.", paciente);
+	    exigir(estaVazio(endereco.getLogradouro()), "O campo Logradouro é obrigatório.", paciente);
+	    exigir(endereco.getNumero() <= 0, "O campo Número é obrigatório.", paciente);
+	    exigir(estaVazio(endereco.getBairro()), "O campo Bairro é obrigatório.", paciente);
+	    exigir(estaVazio(endereco.getCidadeUf()), "O campo Cidade é obrigatório.", paciente);
 	}
-
+	
 	private void validarUnicidade(Paciente paciente) {
 		Paciente encontrado = pacienteRepository.findByCpf(paciente.getCpf());
 
 		if (encontrado != null && !encontrado.getId().equals(paciente.getId())) {
-			throw new IllegalArgumentException("Já existe um paciente cadastrado com este CPF!");
+			exigir(true, "Já existe um paciente cadastrado com este CPF!", paciente);
 		}
+	}
+	
+	private void exigir(boolean invalido, String mensagem, Object dados) {
+	    if (invalido) {
+	        throw new ValidacaoException(mensagem, dados);
+	    }
 	}
 
 	private boolean estaVazio(String texto) {

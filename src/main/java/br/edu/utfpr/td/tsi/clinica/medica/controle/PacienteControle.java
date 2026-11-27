@@ -27,7 +27,6 @@ public class PacienteControle {
 	
 	@PostMapping("cadastroPaciente")
 	public String receberFormPaciente(Paciente paciente, Endereco endereco) {
-		paciente.setId(UUID.randomUUID().toString());
 		pacienteService.salvar(paciente, endereco);
 		return "paginaPrincipal";
 	}
