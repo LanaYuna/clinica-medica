@@ -32,18 +32,29 @@ public class DiagnosticoServiceImpl implements DiagnosticoService {
 	
 	@Autowired 
 	private MedicoService medicoService;
+	
+	@Autowired
+	private IndexadorDiagnostico indexador;
 
 	@Override
 	public void salvar(Diagnostico diagnostico) {
 		validarCamposObrigatorios(diagnostico);
 		validarMedicoEPaciente(diagnostico);
 		diagnosticoRepository.save(diagnostico);
+		indexador.indexar(diagnostico);
 	}
 	
 	@Override
-	public List<DiagnosticoListagemDTO> listarParaListagem() {
+	public List<DiagnosticoListagemDTO> listarParaListagem(String idMedico, String idPaciente, TipoAtendimento tipo) {
 		
-		List<Diagnostico> diagnosticos = diagnosticoRepository.findAll();
+		List<Diagnostico> diagnosticos;
+		
+		if (estaVazio(idMedico) && estaVazio(idPaciente) && tipo == null) {
+			diagnosticos = diagnosticoRepository.findAll();
+		} else {
+			List<String> ids = indexador.procurar(idMedico, idPaciente, tipo);
+			diagnosticos = diagnosticoRepository.findAllById(ids);
+		}
 		
 		List<DiagnosticoListagemDTO> resultado = new ArrayList<>();
 		
@@ -72,6 +83,7 @@ public class DiagnosticoServiceImpl implements DiagnosticoService {
 	@Override
 	public void remover(String id) {
 		diagnosticoRepository.deleteById(id);
+		indexador.remover(id);
 	}
 
 	@Override
@@ -82,6 +94,7 @@ public class DiagnosticoServiceImpl implements DiagnosticoService {
 		validarCamposObrigatorios(diagnostico);
 		validarMedicoEPaciente(diagnostico);
 		diagnosticoRepository.save(diagnostico);
+		indexador.indexar(diagnostico);
 	}
 
 	@Override
