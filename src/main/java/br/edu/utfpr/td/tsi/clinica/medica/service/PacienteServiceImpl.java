@@ -38,10 +38,12 @@ public class PacienteServiceImpl implements PacienteService {
 	}
 
 	@Override
-	public void alterar(Paciente paciente, Endereco endereco) {
+	public void alterar(Paciente paciente) {
 		if (paciente.getId() == null || !pacienteRepository.existsById(paciente.getId())) {
 			throw new IllegalArgumentException("Paciente não encontrado para alteração.");
 		}
+		
+		Endereco endereco = paciente.getEndereco();
 		paciente.setEndereco(endereco);
 		validarCamposObrigatorios(paciente);
 		validarUnicidade(paciente);

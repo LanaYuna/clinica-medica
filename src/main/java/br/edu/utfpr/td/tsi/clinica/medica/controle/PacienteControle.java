@@ -54,8 +54,8 @@ public class PacienteControle {
 	}
 	
 	@PostMapping("edicaoPaciente")
-	public String processarEdicaoMedicos(Paciente paciente, Endereco endereco, Model model) {
-		pacienteService.alterar(paciente, endereco);
+	public String processarEdicaoPaciente(Paciente paciente, Model model) {
+		pacienteService.alterar(paciente);
 		return "redirect:/listagemPaciente";
 	}
 	

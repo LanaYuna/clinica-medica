@@ -23,4 +23,6 @@ public class GerenciadorExcecoes {
         model.addAttribute("especialidades", Especialidade.values());
         return "medico/cadastroMedico";
     }
+    
+    
 }
