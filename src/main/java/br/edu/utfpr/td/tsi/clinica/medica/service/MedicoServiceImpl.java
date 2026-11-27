@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.utfpr.td.tsi.clinica.medica.controle.excecao.ValidacaoException;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
 import br.edu.utfpr.td.tsi.clinica.medica.persistencia.MedicoRepository;
 
@@ -16,6 +17,7 @@ public class MedicoServiceImpl implements MedicoService{
 
 	@Override
 	public void salvar(Medico medico) {
+		System.out.println("ID recebido no salvar: " + medico.getId());
 		validarCamposObrigatorios(medico);
 		validarUnicidade(medico);
 		medicoRepository.save(medico);
@@ -49,50 +51,42 @@ public class MedicoServiceImpl implements MedicoService{
 
 	private void validarCamposObrigatorios(Medico medico) {	
 		if (medico == null) {
-            throw new IllegalArgumentException("O objeto médico não pode ser nulo.");
+            throw new ValidacaoException("O objeto médico não pode ser nulo.", null);
         }
-        if (medico.getNome() == null || medico.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("O campo Nome é obrigatório.");
-        }
-        if (medico.getCpf() == null || medico.getCpf().trim().isEmpty()) {
-            throw new IllegalArgumentException("O campo CPF é obrigatório.");
-        }
-        if (medico.getCrm() == null || medico.getCrm().trim().isEmpty()) {
-            throw new IllegalArgumentException("O campo CRM é obrigatório.");
-        }
-        if (medico.getEmail() == null || medico.getEmail().trim().isEmpty()) {
-            throw new IllegalArgumentException("O campo E-mail é obrigatório.");
-        }
-        if (medico.getEspecialidades() == null || medico.getEspecialidades().isEmpty()) {
-            throw new IllegalArgumentException("O médico deve possuir pelo menos uma especialidade.");
-        }
+		exigir(estaVazio(medico.getNome()), "O campo Nome é obrigatório.", medico);
+		exigir(estaVazio(medico.getCpf()), "O campo Cpf é obrigatório.", medico);
+		exigir(estaVazio(medico.getEmail()), "O campo Email é obrigatório.", medico);
+		exigir(medico.getEspecialidades() == null || medico.getEspecialidades().isEmpty(), "O médico deve possuir pelo menos uma especialidade.", medico);
 	}
+	
 	private void validarUnicidade(Medico medico) {
         Medico encontrado = medicoRepository.findByCpf(medico.getCpf());
 
-        if (encontrado != null &&
-            !encontrado.getId().equals(medico.getId())) {
-            throw new IllegalArgumentException(
-                "Já existe um médico cadastrado com este CPF!"
-            );
+        if (encontrado != null && !encontrado.getId().equals(medico.getId())) {
+        	exigir(true, "Já existe um médico cadastrado com este CPF!", medico);
         }
 
         encontrado = medicoRepository.findByCrm(medico.getCrm());
 
-        if (encontrado != null &&
-            !encontrado.getId().equals(medico.getId())) {
-            throw new IllegalArgumentException(
-                "Já existe um médico cadastrado com este CRM!"
-            );
+        if (encontrado != null && !encontrado.getId().equals(medico.getId())) {
+        	exigir(true, "Já existe um médico cadastrado com este CRM!", medico);
         }
 
         encontrado = medicoRepository.findByEmail(medico.getEmail());
 
-        if (encontrado != null &&
-            !encontrado.getId().equals(medico.getId())) {
-            throw new IllegalArgumentException(
-                "Já existe um médico cadastrado com este E-mail!"
-            );
+        if (encontrado != null && !encontrado.getId().equals(medico.getId())) {
+        	exigir(true, "Já existe um médico cadastrado com este E-mail", medico);
         }
     }
+	
+	private void exigir(boolean invalido, String mensagem, Object dados) {
+	    if (invalido) {
+	        throw new ValidacaoException(mensagem, dados);
+	    }
+	}
+	
+	private boolean estaVazio(String texto) {
+		return texto == null || texto.trim().isEmpty();
+	}
+	
 }

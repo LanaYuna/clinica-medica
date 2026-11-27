@@ -9,13 +9,6 @@
 
 <body class="bg-blue-50 min-h-screen">
 
-    <div th:if="${mensagemErro}"
-         class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 mx-auto max-w-3xl mt-4"
-         role="alert">
-        <strong class="font-bold">Atenção: </strong>
-        <span th:text="${mensagemErro}" class="block sm:inline"></span>
-    </div>
-
     <div class="flex justify-center px-4 py-6">
 
         <form action="/edicaoDiagnostico" method="POST" class="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-3xl">
@@ -25,6 +18,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                 </svg>
             </a>
+            
+			<div th:if="${mensagemErro}"
+		         class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 mx-auto max-w-3xl mt-4"
+		         role="alert">
+		        <strong class="font-bold">Atenção: </strong>
+		        <span th:text="${mensagemErro}" class="block sm:inline"></span>
+		    </div>
 
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
                 Edição de Diagnóstico
@@ -38,8 +38,7 @@
                 
                 <input type="hidden"
 		           name="id"
-		           th:value="${diagnosticoEncontrado.id}">        
-                
+		           th:value="${diagnosticoEncontrado.id}">         
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
