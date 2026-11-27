@@ -52,11 +52,16 @@ public class DiagnosticoControle {
 	}
 	
 	@GetMapping("listagemDiagnostico")
-	public String mostrarPaginaListagemMedicos(Model model) {
+	public String mostrarPaginaListagemDiagnostico(
+			@RequestParam(name = "idMedico", required = false) String idMedico,
+			@RequestParam(name = "idPaciente", required = false) String idPaciente,
+			@RequestParam(name = "tipoAtendimento", required = false) TipoAtendimento tipoAtendimento,
+			Model model) {
 		List<Medico> medicos = medicoService.listarTodos();
 		List<Paciente> pacientes = pacienteService.listarTodos();
 		List<TipoAtendimento> atendimentos = List.of(TipoAtendimento.values());
-		List<DiagnosticoListagemDTO> diagnosticos = diagnosticoService.listarParaListagem();
+		List<DiagnosticoListagemDTO> diagnosticos =
+				diagnosticoService.listarParaListagem(idMedico, idPaciente, tipoAtendimento);
 		
 		model.addAttribute("diagnosticos", diagnosticos);
 		model.addAttribute("medicos", medicos);

@@ -8,11 +8,11 @@ import br.edu.utfpr.td.tsi.clinica.medica.modelo.TipoAtendimento;
 
 public interface DiagnosticoService {
 	void salvar(Diagnostico diagnostico);
-	List<DiagnosticoListagemDTO> listarParaListagem();
+	List<DiagnosticoListagemDTO> listarParaListagem(String idMedico, String idPaciente, TipoAtendimento tipo);
 	Diagnostico buscarPorId(String id);
 	void remover(String id);
 	void alterar(Diagnostico diagnostico);
 	List<Diagnostico> listarPorMedico(String idMedico);
 	List<Diagnostico> listarPorPaciente(String idPaciente);
-	List<Diagnostico> listarPorTipo(TipoAtendimento tipo);
+	List<Diagnostico> listarPorTipo(TipoAtendimento tipo);	
 }
