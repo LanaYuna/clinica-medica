@@ -29,7 +29,6 @@ public class MedicoControle {
 	
 	@PostMapping("cadastroMedico")
 	public String receberFormMedico(Medico medico) {
-		medico.setId(UUID.randomUUID().toString());
 		medicoService.salvar(medico);
 		return "paginaPrincipal";
 	}

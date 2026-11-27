@@ -10,5 +10,5 @@ public interface PacienteService {
 	List<Paciente> listarTodos();
 	Paciente buscarPorId(String id);
 	void remover(String id);
-	void alterar(Paciente paciente, Endereco endereco);
+	void alterar(Paciente paciente);
 }

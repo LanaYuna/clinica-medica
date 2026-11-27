@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.utfpr.td.tsi.clinica.medica.controle.excecao.ValidacaoException;
 import br.edu.utfpr.td.tsi.clinica.medica.dto.DiagnosticoListagemDTO;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Diagnostico;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Medico;
@@ -113,49 +114,47 @@ public class DiagnosticoServiceImpl implements DiagnosticoService {
 	}
 	
 	private void validarCamposObrigatorios(Diagnostico diagnostico) {
-		if (diagnostico == null) {
-			throw new IllegalArgumentException("O objeto diagnóstico não pode ser nulo.");
-		}
-		if (diagnostico.getDataHora() == null) {
-			throw new IllegalArgumentException("A data e hora do atendimento são obrigatórias.");
-		}
-		if (diagnostico.getTipoAtendimento() == null) {
-			throw new IllegalArgumentException("O tipo de atendimento é obrigatório.");
-		}
-		if (estaVazio(diagnostico.getDescricao())) {
-			throw new IllegalArgumentException("O campo Descrição é obrigatório.");
-		}
-		if (estaVazio(diagnostico.getSintomas())) {
-			throw new IllegalArgumentException("O campo Sintomas é obrigatório.");
-		}
-		if (estaVazio(diagnostico.getMedicamentos())) {
-			throw new IllegalArgumentException("O campo Medicamentos é obrigatório.");
-		}
-		if (estaVazio(diagnostico.getObservacoes())) {
-			throw new IllegalArgumentException("O campo Observações é obrigatório.");
-		}
 
-		String cid = diagnostico.getCid10();
-		if (!estaVazio(cid) && !cid.trim().matches("(?i)[A-Z]\\d{2}(\\.\\d{1,2})?")) {
-			throw new IllegalArgumentException("Código CID-10 inválido. Use o formato A00 ou A00.0.");
-		}
+	    if (diagnostico == null) {
+	        throw new ValidacaoException(
+	            "O objeto diagnóstico não pode ser nulo.", null
+	        );
+	    }
+
+	    exigir(diagnostico.getDataHora() == null,"A data e hora do atendimento são obrigatórias.", diagnostico);
+
+	    exigir(diagnostico.getTipoAtendimento() == null,"O tipo de atendimento é obrigatório.", diagnostico);
+
+	    exigir(estaVazio(diagnostico.getDescricao()),"O campo Descrição é obrigatório.", diagnostico);
+
+	    exigir(estaVazio(diagnostico.getSintomas()),"O campo Sintomas é obrigatório.", diagnostico);
+
+	    exigir(estaVazio(diagnostico.getMedicamentos()),"O campo Medicamentos é obrigatório.", diagnostico);
+
+	    exigir(estaVazio(diagnostico.getObservacoes()), "O campo Observações é obrigatório.", diagnostico);
+
+	    String cid = diagnostico.getCid10();
+
+	    exigir(!estaVazio(cid) && !cid.trim().matches("(?i)[A-Z]\\d{2}(\\.\\d{1,2})?"),"Código CID-10 inválido. Use o formato A00 ou A00.0.",diagnostico);
 	}
 
 	private void validarMedicoEPaciente(Diagnostico diagnostico) {
-		if (estaVazio(diagnostico.getIdMedico())) {
-			throw new IllegalArgumentException("É obrigatório selecionar um médico.");
-		}
-		if (!medicoRepository.existsById(diagnostico.getIdMedico())) {
-			throw new IllegalArgumentException("O médico selecionado não está cadastrado.");
-		}
-		if (estaVazio(diagnostico.getIdPaciente())) {
-			throw new IllegalArgumentException("É obrigatório selecionar um paciente.");
-		}
-		if (!pacienteRepository.existsById(diagnostico.getIdPaciente())) {
-			throw new IllegalArgumentException("O paciente selecionado não está cadastrado.");
-		}
+	
+	    exigir(estaVazio(diagnostico.getIdMedico()),"É obrigatório selecionar um médico.", diagnostico);
+	
+	    exigir(!estaVazio(diagnostico.getIdMedico()) && !medicoRepository.existsById(diagnostico.getIdMedico()),"O médico selecionado não está cadastrado.", diagnostico);
+	
+	    exigir(estaVazio(diagnostico.getIdPaciente()),"É obrigatório selecionar um paciente.", diagnostico);
+	
+	    exigir(!estaVazio(diagnostico.getIdPaciente()) && !pacienteRepository.existsById(diagnostico.getIdPaciente()),"O paciente selecionado não está cadastrado.", diagnostico);
 	}
-
+	
+	private void exigir(boolean invalido, String mensagem, Object dados) {
+	    if (invalido) {
+	        throw new ValidacaoException(mensagem, dados);
+	    }
+	}
+	
 	private boolean estaVazio(String texto) {
 		return texto == null || texto.trim().isEmpty();
 	}

@@ -46,7 +46,6 @@ public class DiagnosticoControle {
 	
 	@PostMapping("cadastroDiagnostico")
 	public String receberFormDiagnostico(Diagnostico diagnostico) {
-		diagnostico.setId(UUID.randomUUID().toString());
 		diagnosticoService.salvar(diagnostico);
 		return "paginaPrincipal";
 	}
