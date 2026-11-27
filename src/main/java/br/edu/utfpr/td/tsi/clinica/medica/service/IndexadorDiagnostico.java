@@ -23,7 +23,7 @@ public class IndexadorDiagnostico {
 	private static final String URL_SOLR = "http://localhost:8983/solr";
 	private static final String CORE = "diagnosticos";
 
-	// Campos dinamicos "*_s" (tipo string, busca exata) ja existem no configset _default
+	
 	private static final String CAMPO_MEDICO = "idMedico_s";
 	private static final String CAMPO_PACIENTE = "idPaciente_s";
 	private static final String CAMPO_TIPO = "tipoAtendimento_s";
@@ -72,7 +72,7 @@ public class IndexadorDiagnostico {
 
 		SolrQuery query = new SolrQuery("*:*");
 		query.setFields("id");
-		query.setRows(10000); // o padrao do Solr e 10 resultados
+		query.setRows(10000);
 
 		adicionarFiltro(query, CAMPO_MEDICO, idMedico);
 		adicionarFiltro(query, CAMPO_PACIENTE, idPaciente);
@@ -93,7 +93,7 @@ public class IndexadorDiagnostico {
 
 	private void adicionarFiltro(SolrQuery query, String campo, String valor) {
 		if (valor != null && !valor.trim().isEmpty()) {
-			// {!term} faz comparacao exata, sem precisar escapar o "-" do UUID
+			
 			query.addFilterQuery("{!term f=" + campo + "}" + valor.trim());
 		}
 	}

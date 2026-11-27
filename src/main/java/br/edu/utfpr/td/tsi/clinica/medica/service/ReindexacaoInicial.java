@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import br.edu.utfpr.td.tsi.clinica.medica.modelo.Diagnostico;
 import br.edu.utfpr.td.tsi.clinica.medica.persistencia.DiagnosticoRepository;
 
-// Ao subir a aplicacao, envia para o Solr os diagnosticos que ja estao no MongoDB
 @Component
 public class ReindexacaoInicial implements ApplicationRunner {
 
