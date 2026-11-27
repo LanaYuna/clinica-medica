@@ -11,8 +11,5 @@ public interface DiagnosticoService {
 	List<DiagnosticoListagemDTO> listarParaListagem(String idMedico, String idPaciente, TipoAtendimento tipo);
 	Diagnostico buscarPorId(String id);
 	void remover(String id);
-	void alterar(Diagnostico diagnostico);
-	List<Diagnostico> listarPorMedico(String idMedico);
-	List<Diagnostico> listarPorPaciente(String idPaciente);
-	List<Diagnostico> listarPorTipo(TipoAtendimento tipo);	
+	void alterar(Diagnostico diagnostico);	
 }

@@ -97,21 +97,6 @@ public class DiagnosticoServiceImpl implements DiagnosticoService {
 		diagnosticoRepository.save(diagnostico);
 		indexador.indexar(diagnostico);
 	}
-
-	@Override
-	public List<Diagnostico> listarPorMedico(String idMedico) {
-		return diagnosticoRepository.findByIdMedico(idMedico);
-	}
-
-	@Override
-	public List<Diagnostico> listarPorPaciente(String idPaciente) {
-		return diagnosticoRepository.findByIdPaciente(idPaciente);
-	}
-
-	@Override
-	public List<Diagnostico> listarPorTipo(TipoAtendimento tipo) {
-		return diagnosticoRepository.findByTipoAtendimento(tipo);
-	}
 	
 	private void validarCamposObrigatorios(Diagnostico diagnostico) {
 
